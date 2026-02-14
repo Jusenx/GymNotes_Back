@@ -1,12 +1,12 @@
 package com.gymnotes.domain.controller;
 
 import com.gymnotes.domain.dto.TreinoRequestDTO;
+import com.gymnotes.domain.dto.TreinoResponseDTO;
 import com.gymnotes.domain.entity.Treino;
 import com.gymnotes.domain.service.TreinoService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/treinos")
@@ -17,8 +17,14 @@ public class TreinoController {
         this.treinoService = treinoService;
     }
 
-    @PostMapping("/{id}")
-    public void criar(@PathVariable Long id, TreinoRequestDTO treino){
-        treinoService.criarTreino(id, treino);
+    @PostMapping("/{usuarioId}")
+    public void criar(@PathVariable Long usuarioId, @RequestBody TreinoRequestDTO treino){
+        treinoService.criarTreino(usuarioId, treino);
     }
+
+    @GetMapping
+    public List<TreinoResponseDTO> listar(){
+        return treinoService.listar();
+    }
+
 }

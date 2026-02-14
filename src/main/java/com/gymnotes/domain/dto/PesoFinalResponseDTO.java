@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PesoFinalRequestDTO {
-
+public class PesoFinalResponseDTO {
     private Double peso;
     private Integer repeticoesRealizadas;
 }

@@ -8,10 +8,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class SerieRequestDTO {
-
+public class SerieResponseDTO {
     private Integer numero;
     private Integer repeticoesPlanejadas;
 
-    private List<PesoFinalRequestDTO> pesosExecutados = new ArrayList<>();
+    private List<PesoFinalResponseDTO> pesosExecutados = new ArrayList<>();
 }

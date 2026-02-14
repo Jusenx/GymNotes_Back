@@ -1,6 +1,7 @@
 package com.gymnotes.domain.service;
 
 import com.gymnotes.domain.dto.TreinoRequestDTO;
+import com.gymnotes.domain.dto.TreinoResponseDTO;
 import com.gymnotes.domain.entity.Exercicio;
 import com.gymnotes.domain.entity.Serie;
 import com.gymnotes.domain.entity.Treino;
@@ -21,20 +22,21 @@ public class TreinoService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public void criarTreino(Long id, TreinoRequestDTO dto) {
+    public void criarTreino(Long usuarioId, TreinoRequestDTO dto) {
 
+        System.out.println(dto.getNomeTreino() + dto.getExercicios());
         if(dto.getNomeTreino() == null || dto.getNomeTreino().isBlank()) {
             throw new IllegalArgumentException("Nome do treino não pode ser vazio");
 
         }
-        System.out.println(dto.getNomeTreino());
+
 
 
         Treino treino = new Treino();
-        treino.setNome(dto.getNomeTreino()); // garante que não seja nulo
+        treino.setNomeTreino(dto.getNomeTreino()); // garante que não seja nulo
 
         // buscar usuário
-        Usuario usuario = usuarioRepository.findById(id)
+        Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         treino.setUsuario(usuario);
@@ -67,6 +69,20 @@ public class TreinoService {
         treino.setExercicios(exercicios);
 
         treinoRepository.save(treino); // salva tudo
+    }
+
+    public List<TreinoResponseDTO> listar() {
+        return treinoRepository.findAll()
+                .stream()
+                .map(this::converterParaDTO)
+                .toList();
+    }
+
+    private TreinoResponseDTO converterParaDTO(Treino treino) {
+        return new TreinoResponseDTO(
+                treino.getNomeTreino(),
+                treino.getExercicios()
+        );
     }
 
 

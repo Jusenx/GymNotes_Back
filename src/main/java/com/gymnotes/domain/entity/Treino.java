@@ -18,7 +18,7 @@ public class Treino {
     private Long id;
 
     @Column(nullable = false)
-    private String nome;
+    private String nomeTreino;
 
     // muitos treinos → um usuário
     @ManyToOne(fetch = FetchType.LAZY)

@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 public class TreinoRequestDTO {
-    private String NomeTreino;
+    private String nomeTreino;
     private List<ExercicioRequestDTO> exercicios = new ArrayList<>();
 }
