@@ -1,0 +1,71 @@
+package com.gymnotes.domain.mapper;
+
+import com.gymnotes.domain.dto.response.ExercicioResponseDTO;
+import com.gymnotes.domain.dto.response.PesoFinalResponseDTO;
+import com.gymnotes.domain.dto.response.SerieResponseDTO;
+import com.gymnotes.domain.dto.response.TreinoResponseDTO;
+import com.gymnotes.domain.entity.Exercicio;
+import com.gymnotes.domain.entity.PesoFinal;
+import com.gymnotes.domain.entity.Serie;
+import com.gymnotes.domain.entity.Treino;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+public class TreinoMapper {
+
+    public TreinoResponseDTO toResponseDTO(Treino treino) {
+
+        return new TreinoResponseDTO(
+                treino.getId(),
+                treino.getNomeTreino(),
+                treino.getExercicios()
+                        .stream()
+                        .map(this::toExercicioDTO)
+                        .toList()
+        );
+    }
+
+    public List<TreinoResponseDTO> toResponseListDTO(List<Treino> treinos) {
+
+        return treinos
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
+    }
+
+
+    private ExercicioResponseDTO toExercicioDTO(Exercicio exercicio) {
+
+        return new ExercicioResponseDTO(
+                exercicio.getNome(),
+                exercicio.getSeries()
+                        .stream()
+                        .map(this::toSerieDTO)
+                        .toList()
+        );
+    }
+
+    private SerieResponseDTO toSerieDTO(Serie serie) {
+
+        return new SerieResponseDTO(
+                serie.getNumeroDeSeries(),
+                serie.getRepeticoesPlanejadas(),
+                serie.getPesoPlanejado(),
+                serie.getPesosExecutados()
+                        .stream()
+                        .map(this::toPesoFinalDTO)
+                        .toList()
+        );
+    }
+
+    private PesoFinalResponseDTO toPesoFinalDTO(PesoFinal peso) {
+
+        return new PesoFinalResponseDTO(
+                peso.getPeso(),
+                peso.getRepeticoesRealizadas()
+        );
+    }
+}

@@ -9,6 +9,7 @@ import com.gymnotes.domain.entity.Exercicio;
 import com.gymnotes.domain.entity.Serie;
 import com.gymnotes.domain.entity.Treino;
 import com.gymnotes.domain.entity.Usuario;
+import com.gymnotes.domain.mapper.TreinoMapper;
 import com.gymnotes.domain.repository.TreinoRepository;
 import com.gymnotes.domain.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
@@ -18,16 +19,18 @@ import java.util.List;
 @Service
 public class TreinoService {
     private TreinoRepository treinoRepository;
+    private TreinoMapper treinoMapper;
     private UsuarioRepository usuarioRepository;
 
-    public TreinoService(TreinoRepository treinoRepository, UsuarioRepository usuarioRepository) {
+    public TreinoService(TreinoRepository treinoRepository, UsuarioRepository usuarioRepository, TreinoMapper treinoMapper) {
         this.treinoRepository = treinoRepository;
         this.usuarioRepository = usuarioRepository;
+        this.treinoMapper = treinoMapper;
     }
 
     public void criarTreino(Long usuarioId, TreinoRequestDTO dto) {
 
-        if(dto.getNomeTreino() == null || dto.getNomeTreino().isBlank()) {
+        if (dto.getNomeTreino() == null || dto.getNomeTreino().isBlank()) {
             throw new IllegalArgumentException("Nome do treino não pode ser vazio");
 
         }
@@ -71,42 +74,16 @@ public class TreinoService {
     }
 
     public List<TreinoResponseDTO> listar() {
-        return treinoRepository.findAll()
-                .stream()
-                .map(this::converterParaDTO)
-                .toList();
+        List<Treino> treinos = treinoRepository.findAll();
+        return treinoMapper.toResponseListDTO(treinos);
     }
 
-    private TreinoResponseDTO converterParaDTO(Treino treino) {
+    public TreinoResponseDTO ProcurarPorId(Long id) {
 
-        List<ExercicioResponseDTO> exercicios =
-                treino.getExercicios()
-                        .stream()
-                        .map(ex -> new ExercicioResponseDTO(
-                                ex.getNome(),
-                                ex.getSeries()
-                                        .stream()
-                                        .map(s -> new SerieResponseDTO(
-                                                s.getNumeroDeSeries(),
-                                                s.getRepeticoesPlanejadas(),
-                                                s.getPesosExecutados()
-                                                        .stream()
-                                                        .map(p -> new PesoFinalResponseDTO(
-                                                                p.getPeso(),
-                                                                p.getRepeticoesRealizadas()
-                                                        ))
-                                                        .toList()
-                                        ))
-                                        .toList()
-                        ))
-                        .toList();
+        Treino treino = treinoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Treino não encontrado"));
 
-        return new TreinoResponseDTO(
-                treino.getNomeTreino(),
-                exercicios
-        );
+        return treinoMapper.toResponseDTO(treino);
     }
-
-
 
 }

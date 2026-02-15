@@ -10,12 +10,14 @@ import java.util.List;
 public class SerieResponseDTO {
     private Integer numero;
     private Integer repeticoesPlanejadas;
+    private Double pesoPlanejado;
 
     private List<PesoFinalResponseDTO> pesosExecutados;
 
-    public SerieResponseDTO(Integer numero, Integer repeticoesPlanejadas, List<PesoFinalResponseDTO> pesosExecutados) {
+    public SerieResponseDTO(Integer numero, Integer repeticoesPlanejadas, Double pesoPlanejado, List<PesoFinalResponseDTO> pesosExecutados) {
         this.numero = numero;
         this.repeticoesPlanejadas = repeticoesPlanejadas;
+        this.pesoPlanejado = pesoPlanejado;
         this.pesosExecutados = pesosExecutados;
     }
 }
