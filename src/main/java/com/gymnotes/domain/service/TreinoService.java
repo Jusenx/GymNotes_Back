@@ -1,7 +1,10 @@
 package com.gymnotes.domain.service;
 
-import com.gymnotes.domain.dto.TreinoRequestDTO;
-import com.gymnotes.domain.dto.TreinoResponseDTO;
+import com.gymnotes.domain.dto.request.TreinoRequestDTO;
+import com.gymnotes.domain.dto.response.ExercicioResponseDTO;
+import com.gymnotes.domain.dto.response.PesoFinalResponseDTO;
+import com.gymnotes.domain.dto.response.SerieResponseDTO;
+import com.gymnotes.domain.dto.response.TreinoResponseDTO;
 import com.gymnotes.domain.entity.Exercicio;
 import com.gymnotes.domain.entity.Serie;
 import com.gymnotes.domain.entity.Treino;
@@ -24,16 +27,14 @@ public class TreinoService {
 
     public void criarTreino(Long usuarioId, TreinoRequestDTO dto) {
 
-        System.out.println(dto.getNomeTreino() + dto.getExercicios());
         if(dto.getNomeTreino() == null || dto.getNomeTreino().isBlank()) {
             throw new IllegalArgumentException("Nome do treino não pode ser vazio");
 
         }
 
 
-
         Treino treino = new Treino();
-        treino.setNomeTreino(dto.getNomeTreino()); // garante que não seja nulo
+        treino.setNomeTreino(dto.getNomeTreino());
 
         // buscar usuário
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -45,28 +46,26 @@ public class TreinoService {
         List<Exercicio> exercicios = dto.getExercicios()
                 .stream()
                 .map(exDto -> {
+
                     Exercicio exercicio = new Exercicio();
                     exercicio.setNome(exDto.getNome());
                     exercicio.setTreino(treino);
 
-                    List<Serie> series = exDto.getSeries()
-                            .stream()
-                            .map(sDto -> {
-                                Serie serie = new Serie();
-                                serie.setNumero(sDto.getNumero());
-                                serie.setRepeticoesPlanejadas(sDto.getRepeticoesPlanejadas());
-                                serie.setExercicio(exercicio);
-                                return serie;
-                            })
-                            .toList();
+                    // cria a série
+                    Serie serie = new Serie();
+                    serie.setNumeroDeSeries(exDto.getNumeroDeSeries());
+                    serie.setRepeticoesPlanejadas(exDto.getRepeticoesPlanejadas());
+                    serie.setPesoPlanejado(exDto.getPesoPlanejado());
+                    serie.setExercicio(exercicio);
 
-                    exercicio.setSeries(series);
+                    exercicio.setSeries(List.of(serie));
 
                     return exercicio;
                 })
                 .toList();
 
         treino.setExercicios(exercicios);
+
 
         treinoRepository.save(treino); // salva tudo
     }
@@ -79,11 +78,35 @@ public class TreinoService {
     }
 
     private TreinoResponseDTO converterParaDTO(Treino treino) {
+
+        List<ExercicioResponseDTO> exercicios =
+                treino.getExercicios()
+                        .stream()
+                        .map(ex -> new ExercicioResponseDTO(
+                                ex.getNome(),
+                                ex.getSeries()
+                                        .stream()
+                                        .map(s -> new SerieResponseDTO(
+                                                s.getNumeroDeSeries(),
+                                                s.getRepeticoesPlanejadas(),
+                                                s.getPesosExecutados()
+                                                        .stream()
+                                                        .map(p -> new PesoFinalResponseDTO(
+                                                                p.getPeso(),
+                                                                p.getRepeticoesRealizadas()
+                                                        ))
+                                                        .toList()
+                                        ))
+                                        .toList()
+                        ))
+                        .toList();
+
         return new TreinoResponseDTO(
                 treino.getNomeTreino(),
-                treino.getExercicios()
+                exercicios
         );
     }
+
 
 
 }

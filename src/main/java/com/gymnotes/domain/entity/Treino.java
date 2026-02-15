@@ -20,7 +20,6 @@ public class Treino {
     @Column(nullable = false)
     private String nomeTreino;
 
-    // muitos treinos → um usuário
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;

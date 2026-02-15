@@ -17,13 +17,17 @@ public class Serie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ordem da série (1ª, 2ª, 3ª...)
+    // numero de series
     @Column(nullable = false)
-    private Integer numero;
+    private Integer numeroDeSeries;
 
     // reps planejadas
     @Column(nullable = false)
     private Integer repeticoesPlanejadas;
+
+    // peso planejado
+    @Column(nullable = false)
+    private Double pesoPlanejado;
 
     // exercício ao qual pertence
     @ManyToOne(fetch = FetchType.LAZY)

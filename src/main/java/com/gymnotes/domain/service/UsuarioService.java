@@ -1,6 +1,6 @@
 package com.gymnotes.domain.service;
 
-import com.gymnotes.domain.dto.UsuarioRequestDTO;
+import com.gymnotes.domain.dto.request.UsuarioRequestDTO;
 import com.gymnotes.domain.entity.Usuario;
 import com.gymnotes.domain.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;

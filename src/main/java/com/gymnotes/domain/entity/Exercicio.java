@@ -20,12 +20,10 @@ public class Exercicio {
     @Column(nullable = false)
     private String nome;
 
-    // muitos exercícios → um treino
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "treino_id", nullable = false)
     private Treino treino;
 
-    // um exercício → muitas séries
     @OneToMany(
             mappedBy = "exercicio",
             cascade = CascadeType.ALL,

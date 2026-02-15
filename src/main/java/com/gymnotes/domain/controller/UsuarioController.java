@@ -1,6 +1,6 @@
 package com.gymnotes.domain.controller;
 
-import com.gymnotes.domain.dto.UsuarioRequestDTO;
+import com.gymnotes.domain.dto.request.UsuarioRequestDTO;
 import com.gymnotes.domain.entity.Usuario;
 import com.gymnotes.domain.service.UsuarioService;
 import org.springframework.web.bind.annotation.*;

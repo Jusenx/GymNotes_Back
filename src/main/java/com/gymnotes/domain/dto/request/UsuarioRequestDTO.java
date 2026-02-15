@@ -1,4 +1,4 @@
-package com.gymnotes.domain.dto;
+package com.gymnotes.domain.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
