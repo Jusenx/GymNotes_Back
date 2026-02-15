@@ -1,20 +1,44 @@
 package com.gymnotes.domain.mapper;
 
+import com.gymnotes.domain.dto.request.TreinoRequestDTO;
 import com.gymnotes.domain.dto.response.ExercicioResponseDTO;
 import com.gymnotes.domain.dto.response.PesoFinalResponseDTO;
 import com.gymnotes.domain.dto.response.SerieResponseDTO;
 import com.gymnotes.domain.dto.response.TreinoResponseDTO;
-import com.gymnotes.domain.entity.Exercicio;
-import com.gymnotes.domain.entity.PesoFinal;
-import com.gymnotes.domain.entity.Serie;
-import com.gymnotes.domain.entity.Treino;
+import com.gymnotes.domain.entity.*;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Component
 public class TreinoMapper {
+
+    public Treino toRequestDTO(TreinoRequestDTO dto, Usuario usuario) {
+            Treino treino = new Treino();
+            treino.setNomeTreino(dto.getNomeTreino());
+            treino.setUsuario(usuario);
+            List<Exercicio> exercicios = dto.getExercicios()
+                    .stream()
+                    .map(exDTO -> {
+                        Exercicio exercicio = new Exercicio();
+                        exercicio.setNome(exDTO.getNome());
+                        exercicio.setTreino(treino);
+
+                        Serie serie = new Serie();
+                        serie.setNumeroDeSeries(exDTO.getNumeroDeSeries());
+                        serie.setRepeticoesPlanejadas(exDTO.getRepeticoesPlanejadas());
+                        serie.setPesoPlanejado(exDTO.getPesoPlanejado());
+                        serie.setExercicio(exercicio);
+
+                        exercicio.setSeries(List.of(serie));
+
+                        return exercicio;
+                    })
+                    .toList();
+        treino.setExercicios(exercicios);
+        return treino;
+    }
 
     public TreinoResponseDTO toResponseDTO(Treino treino) {
 

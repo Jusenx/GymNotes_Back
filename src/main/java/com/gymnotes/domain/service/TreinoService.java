@@ -35,42 +35,12 @@ public class TreinoService {
 
         }
 
-
-        Treino treino = new Treino();
-        treino.setNomeTreino(dto.getNomeTreino());
-
-        // buscar usuário
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        treino.setUsuario(usuario);
+        Treino treino = treinoMapper.toRequestDTO(dto, usuario);
 
-        // mapear exercícios e séries...
-        List<Exercicio> exercicios = dto.getExercicios()
-                .stream()
-                .map(exDto -> {
-
-                    Exercicio exercicio = new Exercicio();
-                    exercicio.setNome(exDto.getNome());
-                    exercicio.setTreino(treino);
-
-                    // cria a série
-                    Serie serie = new Serie();
-                    serie.setNumeroDeSeries(exDto.getNumeroDeSeries());
-                    serie.setRepeticoesPlanejadas(exDto.getRepeticoesPlanejadas());
-                    serie.setPesoPlanejado(exDto.getPesoPlanejado());
-                    serie.setExercicio(exercicio);
-
-                    exercicio.setSeries(List.of(serie));
-
-                    return exercicio;
-                })
-                .toList();
-
-        treino.setExercicios(exercicios);
-
-
-        treinoRepository.save(treino); // salva tudo
+        treinoRepository.save(treino);
     }
 
     public List<TreinoResponseDTO> listar() {
