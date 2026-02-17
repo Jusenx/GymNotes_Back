@@ -29,8 +29,22 @@ public class TreinoController {
     }
 
     @GetMapping("/{treinoId}")
-    public TreinoResponseDTO listar(@PathVariable Long treinoId){
-        return treinoService.ProcurarPorId(treinoId);
+    public TreinoResponseDTO listarPorTreinoId(@PathVariable Long treinoId){
+        return treinoService.procurarPorId(treinoId);
     }
 
+    @GetMapping("/usuario/{usuarioId}")
+    public List<TreinoResponseDTO> listarPorUsuarioId(@PathVariable Long usuarioId){
+        return treinoService.procurarPorUsuarioId(usuarioId);
+    }
+
+    @PutMapping("/{treinoId}/{usuarioId}")
+    public void alterar(@PathVariable Long treinoId, @PathVariable Long usuarioId, @RequestBody TreinoRequestDTO treino){
+        treinoService.alterar(treinoId, usuarioId, treino);
+    }
+
+    @DeleteMapping("/{treinoId}")
+    public void deletar(@PathVariable Long treinoId){
+        treinoService.deletar(treinoId);
+    }
 }

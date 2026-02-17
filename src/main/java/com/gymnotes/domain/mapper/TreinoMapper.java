@@ -8,38 +8,52 @@ import com.gymnotes.domain.dto.response.TreinoResponseDTO;
 import com.gymnotes.domain.entity.*;
 import org.springframework.stereotype.Component;
 
-
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class TreinoMapper {
 
+    // =========================
+    // CREATE
+    // =========================
     public Treino toRequestDTO(TreinoRequestDTO dto, Usuario usuario) {
-            Treino treino = new Treino();
-            treino.setNomeTreino(dto.getNomeTreino());
-            treino.setUsuario(usuario);
-            List<Exercicio> exercicios = dto.getExercicios()
-                    .stream()
-                    .map(exDTO -> {
-                        Exercicio exercicio = new Exercicio();
-                        exercicio.setNome(exDTO.getNome());
-                        exercicio.setTreino(treino);
 
-                        Serie serie = new Serie();
-                        serie.setNumeroDeSeries(exDTO.getNumeroDeSeries());
-                        serie.setRepeticoesPlanejadas(exDTO.getRepeticoesPlanejadas());
-                        serie.setPesoPlanejado(exDTO.getPesoPlanejado());
-                        serie.setExercicio(exercicio);
+        Treino treino = new Treino();
+        treino.setNomeTreino(dto.getNomeTreino());
+        treino.setUsuario(usuario);
 
-                        exercicio.setSeries(List.of(serie));
+        List<Exercicio> exercicios = new ArrayList<>();
 
-                        return exercicio;
-                    })
-                    .toList();
+        dto.getExercicios().forEach(exDTO -> {
+
+            Exercicio exercicio = new Exercicio();
+            exercicio.setNome(exDTO.getNome());
+            exercicio.setTreino(treino);
+
+            Serie serie = new Serie();
+            serie.setNumeroDeSeries(exDTO.getNumeroDeSeries());
+            serie.setRepeticoesPlanejadas(exDTO.getRepeticoesPlanejadas());
+            serie.setPesoPlanejado(exDTO.getPesoPlanejado());
+            serie.setExercicio(exercicio);
+
+            List<Serie> series = new ArrayList<>();
+            series.add(serie);
+
+            exercicio.setSeries(series);
+
+            exercicios.add(exercicio);
+        });
+
         treino.setExercicios(exercicios);
+
         return treino;
     }
 
+    // =========================
+    // RESPONSE
+    // =========================
     public TreinoResponseDTO toResponseDTO(Treino treino) {
 
         return new TreinoResponseDTO(
@@ -48,7 +62,7 @@ public class TreinoMapper {
                 treino.getExercicios()
                         .stream()
                         .map(this::toExercicioDTO)
-                        .toList()
+                        .collect(Collectors.toList())
         );
     }
 
@@ -57,10 +71,40 @@ public class TreinoMapper {
         return treinos
                 .stream()
                 .map(this::toResponseDTO)
-                .toList();
+                .collect(Collectors.toList());
+    }
+
+    // =========================
+    // UPDATE (ALTERAR)
+    // =========================
+    public void updateExercicios(Treino treino, TreinoRequestDTO dto) {
+
+        // remove os antigos (Hibernate deleta automaticamente)
+        treino.getExercicios().clear();
+
+        dto.getExercicios().forEach(exDTO -> {
+
+            Exercicio exercicio = new Exercicio();
+            exercicio.setNome(exDTO.getNome());
+            exercicio.setTreino(treino);
+
+            Serie serie = new Serie();
+            serie.setNumeroDeSeries(exDTO.getNumeroDeSeries());
+            serie.setRepeticoesPlanejadas(exDTO.getRepeticoesPlanejadas());
+            serie.setPesoPlanejado(exDTO.getPesoPlanejado());
+            serie.setExercicio(exercicio);
+
+            exercicio.getSeries().add(serie);
+
+            // adiciona na MESMA lista
+            treino.getExercicios().add(exercicio);
+        });
     }
 
 
+    // =========================
+    // PRIVATE MAPPERS
+    // =========================
     private ExercicioResponseDTO toExercicioDTO(Exercicio exercicio) {
 
         return new ExercicioResponseDTO(
@@ -68,7 +112,7 @@ public class TreinoMapper {
                 exercicio.getSeries()
                         .stream()
                         .map(this::toSerieDTO)
-                        .toList()
+                        .collect(Collectors.toList())
         );
     }
 
@@ -81,7 +125,7 @@ public class TreinoMapper {
                 serie.getPesosExecutados()
                         .stream()
                         .map(this::toPesoFinalDTO)
-                        .toList()
+                        .collect(Collectors.toList())
         );
     }
 

@@ -3,6 +3,7 @@ package com.gymnotes.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,5 +30,5 @@ public class Exercicio {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<Serie> series;
+    private List<Serie> series = new ArrayList<>();
 }

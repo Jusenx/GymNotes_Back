@@ -48,12 +48,40 @@ public class TreinoService {
         return treinoMapper.toResponseListDTO(treinos);
     }
 
-    public TreinoResponseDTO ProcurarPorId(Long id) {
+    public TreinoResponseDTO procurarPorId(Long id) {
 
         Treino treino = treinoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Treino não encontrado"));
 
         return treinoMapper.toResponseDTO(treino);
     }
+
+    public List<TreinoResponseDTO> procurarPorUsuarioId(Long id) {
+
+        List<Treino> treinos = treinoRepository.findByUsuarioId(id);
+
+        return treinoMapper.toResponseListDTO(treinos);
+    }
+
+    public void deletar(Long id) {
+        treinoRepository.deleteById(id);
+    }
+
+    public void alterar(Long treinoId, Long usuarioId, TreinoRequestDTO dto){
+
+        Treino treino = treinoRepository.findById(treinoId)
+                .orElseThrow(() -> new RuntimeException("Treino não encontrado"));
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        treino.setNomeTreino(dto.getNomeTreino());
+        treino.setUsuario(usuario);
+
+        treinoMapper.updateExercicios(treino, dto);
+
+        treinoRepository.save(treino);
+    }
+
 
 }
