@@ -12,12 +12,10 @@ public class SerieResponseDTO {
     private Integer repeticoesPlanejadas;
     private Double pesoPlanejado;
 
-    private List<PesoFinalResponseDTO> pesosExecutados;
 
-    public SerieResponseDTO(Integer numero, Integer repeticoesPlanejadas, Double pesoPlanejado, List<PesoFinalResponseDTO> pesosExecutados) {
+    public SerieResponseDTO(Integer numero, Integer repeticoesPlanejadas, Double pesoPlanejado) {
         this.numero = numero;
         this.repeticoesPlanejadas = repeticoesPlanejadas;
         this.pesoPlanejado = pesoPlanejado;
-        this.pesosExecutados = pesosExecutados;
     }
 }

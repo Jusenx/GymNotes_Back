@@ -1,12 +1,7 @@
 package com.gymnotes.domain.service;
 
 import com.gymnotes.domain.dto.request.TreinoRequestDTO;
-import com.gymnotes.domain.dto.response.ExercicioResponseDTO;
-import com.gymnotes.domain.dto.response.PesoFinalResponseDTO;
-import com.gymnotes.domain.dto.response.SerieResponseDTO;
 import com.gymnotes.domain.dto.response.TreinoResponseDTO;
-import com.gymnotes.domain.entity.Exercicio;
-import com.gymnotes.domain.entity.Serie;
 import com.gymnotes.domain.entity.Treino;
 import com.gymnotes.domain.entity.Usuario;
 import com.gymnotes.domain.mapper.TreinoMapper;

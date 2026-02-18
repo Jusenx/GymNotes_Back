@@ -34,11 +34,4 @@ public class Serie {
     @JoinColumn(name = "exercicio_id", nullable = false)
     private Exercicio exercicio;
 
-    // histórico de execuções dessa série
-    @OneToMany(
-            mappedBy = "serie",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<PesoFinal> pesosExecutados;
 }

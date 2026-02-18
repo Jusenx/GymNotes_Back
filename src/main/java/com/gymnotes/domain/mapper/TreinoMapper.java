@@ -2,7 +2,6 @@ package com.gymnotes.domain.mapper;
 
 import com.gymnotes.domain.dto.request.TreinoRequestDTO;
 import com.gymnotes.domain.dto.response.ExercicioResponseDTO;
-import com.gymnotes.domain.dto.response.PesoFinalResponseDTO;
 import com.gymnotes.domain.dto.response.SerieResponseDTO;
 import com.gymnotes.domain.dto.response.TreinoResponseDTO;
 import com.gymnotes.domain.entity.*;
@@ -35,7 +34,6 @@ public class TreinoMapper {
             Serie serie = new Serie();
             serie.setNumeroDeSeries(exDTO.getNumeroDeSeries());
             serie.setRepeticoesPlanejadas(exDTO.getRepeticoesPlanejadas());
-            serie.setPesoPlanejado(exDTO.getPesoPlanejado());
             serie.setExercicio(exercicio);
 
             List<Serie> series = new ArrayList<>();
@@ -91,7 +89,6 @@ public class TreinoMapper {
             Serie serie = new Serie();
             serie.setNumeroDeSeries(exDTO.getNumeroDeSeries());
             serie.setRepeticoesPlanejadas(exDTO.getRepeticoesPlanejadas());
-            serie.setPesoPlanejado(exDTO.getPesoPlanejado());
             serie.setExercicio(exercicio);
 
             exercicio.getSeries().add(serie);
@@ -121,19 +118,8 @@ public class TreinoMapper {
         return new SerieResponseDTO(
                 serie.getNumeroDeSeries(),
                 serie.getRepeticoesPlanejadas(),
-                serie.getPesoPlanejado(),
-                serie.getPesosExecutados()
-                        .stream()
-                        .map(this::toPesoFinalDTO)
-                        .collect(Collectors.toList())
+                serie.getPesoPlanejado()
         );
     }
 
-    private PesoFinalResponseDTO toPesoFinalDTO(PesoFinal peso) {
-
-        return new PesoFinalResponseDTO(
-                peso.getPeso(),
-                peso.getRepeticoesRealizadas()
-        );
-    }
 }
