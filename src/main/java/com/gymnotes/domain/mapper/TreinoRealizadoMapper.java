@@ -102,12 +102,17 @@ public class TreinoRealizadoMapper {
     // =========================
     private ExercicioRealizadoResponseDTO toExercicioDTO(ExercicioRealizado exercicioRealizado) {
 
+        System.out.println(
+                exercicioRealizado.getSeries().get(0).getNumero()
+        );
+
         return new ExercicioRealizadoResponseDTO(
                 exercicioRealizado.getNome(),
                 exercicioRealizado.getSeries()
                         .stream()
                         .map(this::toSerieDTO)
                         .collect(Collectors.toList())
+
         );
     }
 

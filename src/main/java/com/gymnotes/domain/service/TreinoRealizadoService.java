@@ -1,6 +1,7 @@
 package com.gymnotes.domain.service;
 
 import com.gymnotes.domain.dto.response.TreinoRealizadoResponseDTO;
+import com.gymnotes.domain.dto.response.TreinoResponseDTO;
 import com.gymnotes.domain.entity.*;
 import com.gymnotes.domain.mapper.TreinoRealizadoMapper;
 import com.gymnotes.domain.repository.TreinoRealizadoRepository;
@@ -72,16 +73,23 @@ public class TreinoRealizadoService {
         return treinoRealizadoMapper.toResponseListDTO(treinos);
     }
 
-    public List<TreinoRealizadoResponseDTO> procurarPorUsuarioId(Long usuarioId){
-        List<TreinoRealizado> treinos = treinoRealizadoRepository.findByUsuarioId(usuarioId);
+    public TreinoRealizadoResponseDTO procurarPorId(Long id) {
+
+        TreinoRealizado treino = treinoRealizadoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Treino não encontrado"));
+
+        return treinoRealizadoMapper.toResponseDTO(treino);
+    }
+
+    public List<TreinoRealizadoResponseDTO> procurarPorUsuarioId(Long id) {
+
+        List<TreinoRealizado> treinos = treinoRealizadoRepository.findByUsuarioId(id);
+
         return treinoRealizadoMapper.toResponseListDTO(treinos);
     }
 
-    public TreinoRealizadoResponseDTO procurarPorId(Long treinoId){
-        TreinoRealizado treino = treinoRealizadoRepository.findById(treinoId)
-                .orElseThrow();
-        return treinoRealizadoMapper.toResponseDTO(treino);
-
+    public void deletar(Long id) {
+        treinoRealizadoRepository.deleteById(id);
     }
 
 

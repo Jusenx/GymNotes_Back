@@ -30,8 +30,13 @@ public class TreinoRealizadoController {
         return service.procurarPorId(treinoRealizadoId);
     }
 
-    @GetMapping("/porUsuarioId/{usuarioId}")
+    @GetMapping("/usuario/{usuarioId}")
     public List<TreinoRealizadoResponseDTO> procurarPorUsuarioId(@PathVariable Long usuarioId){
         return service.procurarPorUsuarioId(usuarioId);
+    }
+
+    @DeleteMapping("/{treinoRealizadoId}")
+    public void deletar(@PathVariable Long treinoRealizadoId){
+        service.deletar(treinoRealizadoId);
     }
 }

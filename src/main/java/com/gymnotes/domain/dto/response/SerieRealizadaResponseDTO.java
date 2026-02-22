@@ -1,5 +1,10 @@
 package com.gymnotes.domain.dto.response;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class SerieRealizadaResponseDTO {
     private Integer numero;
     private Integer repeticoesPlanejadas;
